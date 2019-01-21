@@ -3,6 +3,8 @@ import os
 import re
 import string
 import math
+
+# Cleaning words to remove unnecessary punctuations
 def cleaned_words(sentance):
 	words = re.split(r'\W+', sentance)
 	table = str.maketrans('', '', string.punctuation)
@@ -13,6 +15,7 @@ def cleaned_words(sentance):
 			final_words.append(word.lower())
 	return final_words
 
+# Creating frequency of words for a sentance and all sentances from a document are passed through this function
 def create_frequency_dict(words,words_dict):	
 	for word in words:
 		word = word.lower()
@@ -21,7 +24,7 @@ def create_frequency_dict(words,words_dict):
 		else:
 			words_dict[word] = 1
 	
-
+#Calculate tf of all words in a document
 def get_tf_docs(document):
 	words_dict = dict()
 	total_words_in_doc = 0
@@ -38,6 +41,7 @@ def get_tf_docs(document):
 
 	return tf_of_words
 
+#Calculate tf of all words in all documents so we know which word exists in which doc and what its importance is
 def calculate_tf_all_docs(doc_order):
 	dir = '/home/anumeha/Documents/Multi-document-extraction-based-Summarization/Cluster_of_Docs/d30001t'
 	tf_of_words_in_all_docs = []
@@ -51,6 +55,7 @@ def calculate_tf_all_docs(doc_order):
 		tf_of_words_in_all_docs.append(get_tf_of_words_in_doc)
 	return tf_of_words_in_all_docs
 
+#Calculate tf-idf of words in a sentance and then sum them up 
 def tf_idf_sentance(sentance,doc_no):
 	doc_nums = []
 	tf_allwords = calculate_tf_all_docs(doc_nums)
