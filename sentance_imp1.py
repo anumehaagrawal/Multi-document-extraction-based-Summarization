@@ -3,6 +3,21 @@ import os
 import re
 import string
 import math
+import nltk
+
+k = 5
+
+#Calculate number of adjectives in a sentance
+def adjectives_count(sentance):
+	text = nltk.word_tokenize(sentance)
+	result = nltk.pos_tag(text)
+	count = 0
+	for i in result:
+		if(i[1] == 'JJ'):
+			count = count + 1
+
+	return count
+	
 
 #Calculate upper case words
 def upper_case_words(sentance):
@@ -67,12 +82,28 @@ def calculate_tf_all_docs(doc_order):
 		tf_of_words_in_all_docs.append(get_tf_of_words_in_doc)
 	return tf_of_words_in_all_docs
 
+#Calculate number of top k words present in sentance
+def top_k_tfidf_words(sentance,doc_no):
+	doc_nums = []
+	tf_allwords = calculate_tf_all_docs(doc_nums)
+	tokens = cleaned_words(sentance)
+	doc_no = doc_nums.index(doc_no)
+	sorted_k_tfidf = sorted(tf_allwords[doc_no].items(), key=lambda x: x[1],reverse = True)
+	count = 0
+	for i in range(k):
+		for word in tokens:
+			if(sorted_k_tfidf[i][0]==word):
+				count = count + 1
+				break
+	print(count)
+	return count
+
+
 #Calculate tf-idf of words in a sentance and then sum them up 
 def tf_idf_sentance(sentance,doc_no):
 	doc_nums = []
 	tf_allwords = calculate_tf_all_docs(doc_nums)
 	doc_no = doc_nums.index(doc_no)
-	print(doc_no)
 	words_of_sentance = cleaned_words(sentance)
 	tf_idf_sum = 0
 	for word in words_of_sentance:
@@ -85,7 +116,7 @@ def tf_idf_sentance(sentance,doc_no):
 		idf_word = math.log(len(tf_allwords)/doc_count)
 		tf_idf_sum = tf_idf_sum + (tf_word*idf_word)
 
-	print(tf_idf_sum)
 	return tf_idf_sum
 
-tf_idf_sentance("Cambodia's two-party opposition asked the Asian Development Bank Monday to stop providing loans to the incumbent government, which it calls illegal.",1)
+top_k_tfidf_words("Cambodia's two-party opposition asked the Asian Development Bank Monday to stop providing loans to the incumbent government, which it calls illegal.",1)
+adjectives_count("CCambodia's two-party opposition asked the Asian Development Bank Monday to stop providing loans to the incumbent government, which it calls illegal.")
