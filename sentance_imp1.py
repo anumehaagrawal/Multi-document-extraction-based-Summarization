@@ -4,6 +4,18 @@ import re
 import string
 import math
 
+#Calculate upper case words
+def upper_case_words(sentance):
+	words = sentance.split(" ")
+	count = 0
+	for word in words:
+		if word.lower() == word:
+			count = count
+		else:
+			count = count +1
+
+	return count
+
 # Cleaning words to remove unnecessary punctuations
 def cleaned_words(sentance):
 	words = re.split(r'\W+', sentance)
