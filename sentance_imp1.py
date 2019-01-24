@@ -5,11 +5,36 @@ import string
 import math
 import nltk
 
+from nltk.tag import StanfordNERTagger
+from nltk.tokenize import word_tokenize
+
+
+st = StanfordNERTagger('~/Multi-document-extraction-based-Summarization/english.all.3class.distsim.crf.ser.gz',
+					   '~/Multi-document-extraction-based-Summarization/stanford-ner.jar',
+					   encoding='utf-8')
 k = 5
 
-#Calculate number of adjectives in a sentance
-def adjectives_count(sentance):
-	text = nltk.word_tokenize(sentance)
+def count_named_entities(text):
+	tokenized_text = word_tokenize(text)
+	classified_text = st.tag(tokenized_text)
+	count=0
+	
+	for i in classified_text:
+		if i[1]!='O':
+			count+=1
+
+	return count
+def count_digits(text):
+	words = text.split(" ")
+	count=0
+	for word in words:
+		if word.isdigit() == True:
+			count+=1
+	return count
+
+#Calculate number of adjectives in a sentence
+def adjectives_count(sentence):
+	text = nltk.word_tokenize(sentence)
 	result = nltk.pos_tag(text)
 	count = 0
 	for i in result:
@@ -20,8 +45,8 @@ def adjectives_count(sentance):
 	
 
 #Calculate upper case words
-def upper_case_words(sentance):
-	words = sentance.split(" ")
+def upper_case_words(sentence):
+	words = sentence.split(" ")
 	count = 0
 	for word in words:
 		if word.lower() == word:
@@ -32,8 +57,8 @@ def upper_case_words(sentance):
 	return count
 
 # Cleaning words to remove unnecessary punctuations
-def cleaned_words(sentance):
-	words = re.split(r'\W+', sentance)
+def cleaned_words(sentence):
+	words = re.split(r'\W+', sentence)
 	table = str.maketrans('', '', string.punctuation)
 	stripped = [w.translate(table) for w in words]
 	final_words = []
@@ -42,7 +67,7 @@ def cleaned_words(sentance):
 			final_words.append(word.lower())
 	return final_words
 
-# Creating frequency of words for a sentance and all sentances from a document are passed through this function
+# Creating frequency of words for a sentence and all sentences from a document are passed through this function
 def create_frequency_dict(words,words_dict):	
 	for word in words:
 		word = word.lower()
@@ -55,13 +80,13 @@ def create_frequency_dict(words,words_dict):
 def get_tf_docs(document):
 	words_dict = dict()
 	total_words_in_doc = 0
-	sentances = document[0].split(".")
+	sentences = document[0].split(".")
 	tf_of_words = dict()
 
-	for sentance in sentances:
-		words_in_sentance = cleaned_words(sentance)
-		total_words_in_doc = total_words_in_doc + len(words_in_sentance)
-		create_frequency_dict(words_in_sentance,words_dict)
+	for sentence in sentences:
+		words_in_sentence = cleaned_words(sentence)
+		total_words_in_doc = total_words_in_doc + len(words_in_sentence)
+		create_frequency_dict(words_in_sentence,words_dict)
 
 	for key,value in words_dict.items():
 		tf_of_words[key] = value/total_words_in_doc
@@ -75,18 +100,18 @@ def calculate_tf_all_docs(doc_order):
 	for doc in os.listdir(dir):
 		doc_order.append(int(doc[1:]))
 		f=open(os.path.join( dir, doc ) ,"r") 
-		sentances_dir = []
+		sentences_dir = []
 		for line in f:
-			sentances_dir.append(line)
-		get_tf_of_words_in_doc = get_tf_docs(sentances_dir)
+			sentences_dir.append(line)
+		get_tf_of_words_in_doc = get_tf_docs(sentences_dir)
 		tf_of_words_in_all_docs.append(get_tf_of_words_in_doc)
 	return tf_of_words_in_all_docs
 
-#Calculate number of top k words present in sentance
-def top_k_tfidf_words(sentance,doc_no):
+#Calculate number of top k words present in sentence
+def top_k_tfidf_words(sentence,doc_no):
 	doc_nums = []
 	tf_allwords = calculate_tf_all_docs(doc_nums)
-	tokens = cleaned_words(sentance)
+	tokens = cleaned_words(sentence)
 	doc_no = doc_nums.index(doc_no)
 	sorted_k_tfidf = sorted(tf_allwords[doc_no].items(), key=lambda x: x[1],reverse = True)
 	count = 0
@@ -99,14 +124,14 @@ def top_k_tfidf_words(sentance,doc_no):
 	return count
 
 
-#Calculate tf-idf of words in a sentance and then sum them up 
-def tf_idf_sentance(sentance,doc_no):
+#Calculate tf-idf of words in a sentence and then sum them up 
+def tf_idf_sentence(sentence,doc_no):
 	doc_nums = []
 	tf_allwords = calculate_tf_all_docs(doc_nums)
 	doc_no = doc_nums.index(doc_no)
-	words_of_sentance = cleaned_words(sentance)
+	words_of_sentence = cleaned_words(sentence)
 	tf_idf_sum = 0
-	for word in words_of_sentance:
+	for word in words_of_sentence:
 		word = word.lower()
 		tf_word = tf_allwords[doc_no][word]
 		doc_count = 0
