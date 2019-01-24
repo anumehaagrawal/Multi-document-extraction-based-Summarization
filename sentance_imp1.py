@@ -13,7 +13,7 @@ st = StanfordNERTagger('~/Multi-document-extraction-based-Summarization/english.
 					   '~/Multi-document-extraction-based-Summarization/stanford-ner.jar',
 					   encoding='utf-8')
 k = 5
-
+#Counts the number of named entities
 def count_named_entities(text):
 	tokenized_text = word_tokenize(text)
 	classified_text = st.tag(tokenized_text)
@@ -24,6 +24,8 @@ def count_named_entities(text):
 			count+=1
 
 	return count
+
+#Counts the number of digits in a text
 def count_digits(text):
 	words = text.split(" ")
 	count=0
