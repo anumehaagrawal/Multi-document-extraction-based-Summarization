@@ -5,15 +5,60 @@ import string
 import math
 import nltk
 
+
+from nltk import tokenize
+import gensim.downloader as api
 from nltk.tag import StanfordNERTagger
 from nltk.tokenize import word_tokenize
+from nltk import word_tokenize, pos_tag
+from nltk.corpus import wordnet as wn
 
-
-st = StanfordNERTagger('~/Multi-document-extraction-based-Summarization/english.all.3class.distsim.crf.ser.gz',
-					   '~/Multi-document-extraction-based-Summarization/stanford-ner.jar',
+word_vectors = api.load("glove-wiki-gigaword-100")
+st = StanfordNERTagger('/home/anumeha/Documents/Multi-document-extraction-based-Summarization/english.all.3class.distsim.crf.ser.gz',
+					   '/home/anumeha/Documents/Multi-document-extraction-based-Summarization/stanford-ner.jar',
 					   encoding='utf-8')
 k = 5
+doc_array = []
+doc_order = []
+dir = '/home/anumeha/Documents/Multi-document-extraction-based-Summarization/Cluster_of_Docs/d30001t'
+tf_of_words_in_all_docs = []
+for doc in os.listdir(dir):
+	doc_order.append(int(doc[1:]))
+	f=open(os.path.join( dir, doc ) ,"r") 
+	sentences_dir = []
+	for line in f:
+		sentences_dir.append(line)
+	doc_array.append(sentences_dir)
 
+
+#Returns sentence length
+def length(text,document):
+	sentences=tokenize.sent_tokenize(document)
+	return len(text)/len(sentences)
+
+#Counts number of verbs
+def verbs(text):
+	count=0
+	text = nltk.word_tokenize(text)
+	result = nltk.pos_tag(text)
+	for i in result:
+		if i[1]=='VB':
+			count+=1
+	return count
+
+#Calculates sentence position in corpus
+def sentencePos(document,sentence):
+	sentences=tokenize.sent_tokenize(document)
+	pos=0
+	result = 0
+	for i in sentences:
+		if(i==sentence):
+			result = pos
+			break
+		pos+=1
+	return result/len(sentences)
+
+#Counts the number of named entities
 def count_named_entities(text):
 	tokenized_text = word_tokenize(text)
 	classified_text = st.tag(tokenized_text)
@@ -24,6 +69,8 @@ def count_named_entities(text):
 			count+=1
 
 	return count
+
+#Counts the number of digits in a text
 def count_digits(text):
 	words = text.split(" ")
 	count=0
@@ -94,25 +141,17 @@ def get_tf_docs(document):
 	return tf_of_words
 
 #Calculate tf of all words in all documents so we know which word exists in which doc and what its importance is
-def calculate_tf_all_docs(doc_order):
-	dir = '/home/anumeha/Documents/Multi-document-extraction-based-Summarization/Cluster_of_Docs/d30001t'
-	tf_of_words_in_all_docs = []
-	for doc in os.listdir(dir):
-		doc_order.append(int(doc[1:]))
-		f=open(os.path.join( dir, doc ) ,"r") 
-		sentences_dir = []
-		for line in f:
-			sentences_dir.append(line)
-		get_tf_of_words_in_doc = get_tf_docs(sentences_dir)
+def calculate_tf_all_docs():
+	for i in range(len(doc_array)):
+		get_tf_of_words_in_doc = get_tf_docs(doc_array[i])
 		tf_of_words_in_all_docs.append(get_tf_of_words_in_doc)
 	return tf_of_words_in_all_docs
 
 #Calculate number of top k words present in sentence
 def top_k_tfidf_words(sentence,doc_no):
-	doc_nums = []
-	tf_allwords = calculate_tf_all_docs(doc_nums)
+	tf_allwords = calculate_tf_all_docs()
 	tokens = cleaned_words(sentence)
-	doc_no = doc_nums.index(doc_no)
+	#doc_no = doc_order.index(doc_no)
 	sorted_k_tfidf = sorted(tf_allwords[doc_no].items(), key=lambda x: x[1],reverse = True)
 	count = 0
 	for i in range(k):
@@ -120,15 +159,14 @@ def top_k_tfidf_words(sentence,doc_no):
 			if(sorted_k_tfidf[i][0]==word):
 				count = count + 1
 				break
-	print(count)
+	
 	return count
 
 
 #Calculate tf-idf of words in a sentence and then sum them up 
 def tf_idf_sentence(sentence,doc_no):
-	doc_nums = []
-	tf_allwords = calculate_tf_all_docs(doc_nums)
-	doc_no = doc_nums.index(doc_no)
+	tf_allwords = calculate_tf_all_docs()
+	#doc_no = doc_order.index(doc_no)
 	words_of_sentence = cleaned_words(sentence)
 	tf_idf_sum = 0
 	for word in words_of_sentence:
@@ -141,7 +179,29 @@ def tf_idf_sentence(sentence,doc_no):
 		idf_word = math.log(len(tf_allwords)/doc_count)
 		tf_idf_sum = tf_idf_sum + (tf_word*idf_word)
 
-	return tf_idf_sum
+	print(tf_idf_sum)
+	top_k_words = top_k_tfidf_words(sentence,doc_no)
+	print(top_k_words)
+	upper_case = upper_case_words(sentence)
+	print(upper_case)
+	adjectives = adjectives_count(sentence)
+	print(adjectives)
+	digit_count = count_digits(sentence)
+	print(digit_count)
+	ner_count = count_named_entities(sentence)
+	print(ner_count)
+	sentence_pos = sentencePos(doc_array[doc_no][0],sentence)
+	print(sentence_pos)
+	verb_count = verbs(sentence)
+	print(verb_count)
+	sentence_len = length(sentence,doc_array[doc_no][0])
+	print(sentence_len)
+	feature_vector_for_one_sentence = [tf_idf_sum,top_k_words,upper_case,adjectives,digit_count,ner_count,sentence_pos,verbs,sentence_len]
 
-top_k_tfidf_words("Cambodia's two-party opposition asked the Asian Development Bank Monday to stop providing loans to the incumbent government, which it calls illegal.",1)
-adjectives_count("CCambodia's two-party opposition asked the Asian Development Bank Monday to stop providing loans to the incumbent government, which it calls illegal.")
+sentence_obama = 'Obama speaks to the media in Illinois'.lower().split()
+sentence_president = 'The president greets the press in Chicago'.lower().split()
+similarity = word_vectors.wmdistance(sentence_obama, sentence_president)
+print("{:.4f}".format(similarity))
+
+tf_idf_sentence("Cambodia's two-party opposition asked the Asian Development Bank Monday to stop providing loans to the incumbent government, which it calls illegal.",1)
+adjectives_count("Cambodia's two-party opposition asked the Asian Development Bank Monday to stop providing loans to the incumbent government, which it calls illegal.")
