@@ -142,6 +142,35 @@ def tf_idf_sentence(sentence,doc_no):
 		tf_idf_sum = tf_idf_sum + (tf_word*idf_word)
 
 	return tf_idf_sum
+	
+def length(text):
+	return len(text)
+
+def upperCaseLetters(text):
+	upperCount=0
+	for i in text:
+	    if i.isupper():
+	        upperCount+=1;
+	return upperCount
+
+def verbs(text):
+	count=0
+	text = nltk.word_tokenize(text)
+	result = nltk.pos_tag(text)
+	for i in result:
+		if i[1]=='VB':
+			count+=1
+	return count
+
+def sentencePos(text):
+	sentences=tokenize.sent_tokenize(text)
+	pos=0
+	result=[]
+	for i in sentences:
+		pair=[i,pos]
+		result.append(pair)
+		pos+=1
+	return result
 
 top_k_tfidf_words("Cambodia's two-party opposition asked the Asian Development Bank Monday to stop providing loans to the incumbent government, which it calls illegal.",1)
 adjectives_count("CCambodia's two-party opposition asked the Asian Development Bank Monday to stop providing loans to the incumbent government, which it calls illegal.")
