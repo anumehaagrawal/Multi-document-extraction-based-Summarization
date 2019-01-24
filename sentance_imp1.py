@@ -5,6 +5,7 @@ import string
 import math
 import nltk
 
+
 from nltk import tokenize
 import gensim.downloader as api
 from nltk.tag import StanfordNERTagger
@@ -164,7 +165,6 @@ def top_k_tfidf_words(sentence,doc_no):
 
 #Calculate tf-idf of words in a sentence and then sum them up 
 def tf_idf_sentence(sentence,doc_no):
-	
 	tf_allwords = calculate_tf_all_docs()
 	#doc_no = doc_order.index(doc_no)
 	words_of_sentence = cleaned_words(sentence)
