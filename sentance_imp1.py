@@ -4,10 +4,11 @@ import re
 import string
 import math
 import nltk
+import gensim.downloader as api
 
 
 from nltk import tokenize
-import gensim.downloader as api
+from sklearn.metrics.pairwise import cosine_similarity
 from nltk.tag import StanfordNERTagger
 from nltk.tokenize import word_tokenize
 from nltk import word_tokenize, pos_tag
@@ -178,6 +179,15 @@ def tf_idf_sentence(sentence,doc_no):
 				doc_count = doc_count + 1
 		idf_word = math.log(len(tf_allwords)/doc_count)
 		tf_idf_sum = tf_idf_sum + (tf_word*idf_word)
+
+#cosine similarity- returns the similarity matrix
+def cosine_similarity(sentences,sentence_vectors):
+	sim_mat = np.zeros([len(sentences), len(sentences)])
+	for i in range(len(sentences)):
+		for j in range(len(sentences)):
+			if i != j:
+			sim_mat[i][j] = cosine_similarity(sentence_vectors[i].reshape(1,100), sentence_vectors[j].reshape(1,100))[0,0]
+	return sim_mat
 
 	print(tf_idf_sum)
 	top_k_words = top_k_tfidf_words(sentence,doc_no)
