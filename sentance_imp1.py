@@ -31,6 +31,12 @@ for doc in os.listdir(dir):
 		sentences_dir.append(line)
 	doc_array.append(sentences_dir)
 
+def get_doc_order():
+	return doc_order
+
+def get_documents():
+	return doc_array
+
 
 #Returns sentence length
 def length(text,document):
@@ -152,7 +158,7 @@ def calculate_tf_all_docs():
 def top_k_tfidf_words(sentence,doc_no):
 	tf_allwords = calculate_tf_all_docs()
 	tokens = cleaned_words(sentence)
-	#doc_no = doc_order.index(doc_no)
+	doc_no = doc_order.index(doc_no)
 	sorted_k_tfidf = sorted(tf_allwords[doc_no].items(), key=lambda x: x[1],reverse = True)
 	count = 0
 	for i in range(k):
@@ -167,12 +173,12 @@ def top_k_tfidf_words(sentence,doc_no):
 #Calculate tf-idf of words in a sentence and then sum them up 
 def tf_idf_sentence(sentence,doc_no):
 	tf_allwords = calculate_tf_all_docs()
-	#doc_no = doc_order.index(doc_no)
+	doc_num = doc_order.index(doc_no)
 	words_of_sentence = cleaned_words(sentence)
 	tf_idf_sum = 0
 	for word in words_of_sentence:
 		word = word.lower()
-		tf_word = tf_allwords[doc_no][word]
+		tf_word = tf_allwords[doc_num][word]
 		doc_count = 0
 		for doc in tf_allwords:
 			if word in doc.keys():
@@ -180,38 +186,32 @@ def tf_idf_sentence(sentence,doc_no):
 		idf_word = math.log(len(tf_allwords)/doc_count)
 		tf_idf_sum = tf_idf_sum + (tf_word*idf_word)
 
+	#print(tf_idf_sum)
+	top_k_words = top_k_tfidf_words(sentence,doc_no)
+	#print(top_k_words)
+	upper_case = upper_case_words(sentence)
+	#print(upper_case)
+	adjectives = adjectives_count(sentence)
+	#print(adjectives)
+	digit_count = count_digits(sentence)
+	#print(digit_count)
+	ner_count = count_named_entities(sentence)
+	#print(ner_count)
+	sentence_pos = sentencePos(doc_array[doc_no][0],sentence)
+	#print(sentence_pos)
+	verb_count = verbs(sentence)
+	#print(verb_count)
+	sentence_len = length(sentence,doc_array[doc_no][0])
+	#print(sentence_len)
+	feature_vector_for_one_sentence = [tf_idf_sum,top_k_words,upper_case,adjectives,digit_count,ner_count,sentence_pos,verb_count,sentence_len]
+	return feature_vector_for_one_sentence
+
 #cosine similarity- returns the similarity matrix
 def cosine_similarity(sentences,sentence_vectors):
 	sim_mat = np.zeros([len(sentences), len(sentences)])
 	for i in range(len(sentences)):
 		for j in range(len(sentences)):
 			if i != j:
-			sim_mat[i][j] = cosine_similarity(sentence_vectors[i].reshape(1,100), sentence_vectors[j].reshape(1,100))[0,0]
+				sim_mat[i][j] = cosine_similarity(sentence_vectors[i].reshape(1,100), sentence_vectors[j].reshape(1,100))[0,0]
 	return sim_mat
 
-	print(tf_idf_sum)
-	top_k_words = top_k_tfidf_words(sentence,doc_no)
-	print(top_k_words)
-	upper_case = upper_case_words(sentence)
-	print(upper_case)
-	adjectives = adjectives_count(sentence)
-	print(adjectives)
-	digit_count = count_digits(sentence)
-	print(digit_count)
-	ner_count = count_named_entities(sentence)
-	print(ner_count)
-	sentence_pos = sentencePos(doc_array[doc_no][0],sentence)
-	print(sentence_pos)
-	verb_count = verbs(sentence)
-	print(verb_count)
-	sentence_len = length(sentence,doc_array[doc_no][0])
-	print(sentence_len)
-	feature_vector_for_one_sentence = [tf_idf_sum,top_k_words,upper_case,adjectives,digit_count,ner_count,sentence_pos,verbs,sentence_len]
-
-sentence_obama = 'Obama speaks to the media in Illinois'.lower().split()
-sentence_president = 'The president greets the press in Chicago'.lower().split()
-similarity = word_vectors.wmdistance(sentence_obama, sentence_president)
-print("{:.4f}".format(similarity))
-
-tf_idf_sentence("Cambodia's two-party opposition asked the Asian Development Bank Monday to stop providing loans to the incumbent government, which it calls illegal.",1)
-adjectives_count("Cambodia's two-party opposition asked the Asian Development Bank Monday to stop providing loans to the incumbent government, which it calls illegal.")
