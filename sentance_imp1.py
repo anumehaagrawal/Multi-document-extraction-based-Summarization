@@ -158,7 +158,7 @@ def calculate_tf_all_docs():
 def top_k_tfidf_words(sentence,doc_no):
 	tf_allwords = calculate_tf_all_docs()
 	tokens = cleaned_words(sentence)
-	doc_no = doc_order.index(doc_no)
+	#doc_no = doc_order.index(doc_no)
 	sorted_k_tfidf = sorted(tf_allwords[doc_no].items(), key=lambda x: x[1],reverse = True)
 	count = 0
 	for i in range(k):
@@ -173,12 +173,12 @@ def top_k_tfidf_words(sentence,doc_no):
 #Calculate tf-idf of words in a sentence and then sum them up 
 def tf_idf_sentence(sentence,doc_no):
 	tf_allwords = calculate_tf_all_docs()
-	doc_num = doc_order.index(doc_no)
+	#doc_num = doc_order.index(doc_no)
 	words_of_sentence = cleaned_words(sentence)
 	tf_idf_sum = 0
 	for word in words_of_sentence:
 		word = word.lower()
-		tf_word = tf_allwords[doc_num][word]
+		tf_word = tf_allwords[doc_no][word]
 		doc_count = 0
 		for doc in tf_allwords:
 			if word in doc.keys():
