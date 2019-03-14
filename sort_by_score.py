@@ -50,7 +50,7 @@ def score_imp_summary(threshold):
     return summary
 
 def main():
-    Summary = score_imp_summary(0.3) 
+    Summary = score_imp_summary(0.5) 
     print("The summary is:")
     print('.'.join(Summary))
     print("Word count:")
