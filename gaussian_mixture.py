@@ -2,9 +2,8 @@ from sentence_array import sentence_array_final
 import sentence_imp as fv
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
-from sklearn.cluster import KMeans
 import collections
-
+from sklearn.mixture import GaussianMixture
 
 def document_generate():
     doc_array = sentence_array_final
@@ -22,10 +21,10 @@ def k_means():
     transformer = TfidfTransformer(smooth_idf=False)
     tfidf = transformer.fit_transform(X)
     num_clusters = 5
-    km = KMeans(n_clusters=num_clusters, random_state = 42)
-    km.fit(tfidf)
+    gm = GaussianMixture(n_components=num_clusters, random_state = 42)
+    labels = gm.fit(tfidf.toarray()).predict(tfidf.toarray())
     clustering = collections.defaultdict(list)
-    for idx, label in enumerate(km.labels_):
+    for idx, label in enumerate(labels):
         clustering[label].append(idx)
 
     summary = []
