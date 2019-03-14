@@ -6,12 +6,11 @@ from sklearn.cluster import KMeans
 import collections
 
 def document_generate():
-    doc_array = fv.get_documents()
+    doc_array = sentence_array_final
     documents = []
     for doc in range(len(doc_array)):
-        sentences = doc_array[doc][0].split(".")
-        for group in sentences:
-            documents.append(group)
+        sentences = doc_array[doc][0]
+        documents.append(sentences)
     return documents
 
 def k_means():

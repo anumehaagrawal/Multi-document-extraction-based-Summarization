@@ -43,7 +43,6 @@ for doc in os.listdir(dir):
 		sentences_dir.append(clean_sentence(line))
 	doc_array.append(['.'.join(sentences_dir)])
 
-print(doc_array)
 	
 
 def get_doc_order():
