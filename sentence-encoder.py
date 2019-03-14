@@ -1,4 +1,4 @@
-import sentence_imp1 as fv
+import sentence_imp as fv
 from sklearn.metrics.pairwise import cosine_similarity
 from sentence_array import sentence_array_final
 maxLen = 101
@@ -7,17 +7,16 @@ sentences_array=[]
 
 def create_sentence_val():
     doc_array = fv.get_documents()
-    print(doc_array)
     doc_order = fv.get_doc_order()
     for doc in range(10):
         if(doc<len(doc_array) and len(doc_array[doc])>= 1):
-
             sentences = doc_array[doc][0].split(".")
             #doc_num = doc_order[doc]
             for group in sentences:
                 feature_vec = fv.tf_idf_sentence(group,doc)
                 mapping = [group,sum(feature_vec)]
                 sentences_array.append(mapping)
+    print(sentences_array)
 
 def importance(sentence_stack):
     summ =0
@@ -53,5 +52,4 @@ def stack_decoder():
                     decoder_stacks[newLen].append([j,score])
     print(decoder_stacks)
 
-sentences_array = sentence_array_final
-stack_decoder()
+create_sentence_val()
