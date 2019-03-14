@@ -38,11 +38,14 @@ for doc in os.listdir(dir):
 	with open(os.path.join(dir,doc)) as f:
 		para = f.readlines()
 	tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
-	lines = tokenizer.tokenize(para[0])
+	lines = []
+	for line in para:
+		lines.append(tokenizer.tokenize(line))
 	sentences_dir = []
 	
 	for line in lines:
 		sentences_dir.append(clean_words(line))
+
 	doc_array.append(sentences_dir)
 
 def get_doc_order():
