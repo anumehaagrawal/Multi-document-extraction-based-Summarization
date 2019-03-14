@@ -21,11 +21,9 @@ st = StanfordNERTagger('/home/anumeha/Documents/Multi-document-extraction-based-
 #					   '/home/rosa31/stanford-ner-2018-10-16/stanford-ner.jar',
 #					   encoding='utf-8')
 k = 5
-doc_array = []
-doc_order = []
 dir = '/home/anumeha/Documents/Multi-document-extraction-based-Summarization/Cluster_of_Docs/d30001t'
 
-def clean_words(sentence):
+def clean_sentence(sentence):
     return ''.join(e for e in sentence if e.isalnum() or e in [' ','-','\'',',','\''])
 
 doc_array = []
@@ -40,9 +38,13 @@ for doc in os.listdir(dir):
 	tokenizer = nltk.data.load('tokenizers/punkt/english.pickle')
 	lines = tokenizer.tokenize(para[0])
 	sentences_dir = []
+	
 	for line in lines:
-		sentences_dir.append(clean_words(line))
-	doc_array.append(sentences_dir)
+		sentences_dir.append(clean_sentence(line))
+	doc_array.append(['.'.join(sentences_dir)])
+
+print(doc_array)
+	
 
 def get_doc_order():
 	return doc_order
@@ -228,3 +230,4 @@ def cosine_similarity(sentences,sentence_vectors):
 				sim_mat[i][j] = cosine_similarity(sentence_vectors[i].reshape(1,100), sentence_vectors[j].reshape(1,100))[0,0]
 	return sim_mat
 
+get_documents()
