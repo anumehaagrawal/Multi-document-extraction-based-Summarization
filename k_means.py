@@ -19,7 +19,7 @@ def k_means():
     X = vectorizer.fit_transform(documents)
     transformer = TfidfTransformer(smooth_idf=False)
     tfidf = transformer.fit_transform(X)
-    num_clusters = 8
+    num_clusters = 7
     km = KMeans(n_clusters=num_clusters, random_state = 42)
     km.fit(tfidf)
     clustering = collections.defaultdict(list)
