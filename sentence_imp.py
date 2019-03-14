@@ -14,14 +14,14 @@ from nltk.tokenize import word_tokenize
 from nltk import word_tokenize, pos_tag
 from nltk.corpus import wordnet as wn
 
-st = StanfordNERTagger('/home/anumeha/Documents/Multi-document-extraction-based-Summarization/english.all.3class.distsim.crf.ser.gz',
- 					   '/home/anumeha/Documents/Multi-document-extraction-based-Summarization/stanford-ner.jar',
+st = StanfordNERTagger('/home/sunitha/Desktop/6th sem/IR/Multi-document-extraction-based-Summarization/english.all.3class.distsim.crf.ser.gz',
+ 					   '/home/sunitha/Desktop/6th sem/IR/Multi-document-extraction-based-Summarization/stanford-ner.jar',
  					   encoding='utf-8')
 #st = StanfordNERTagger('/home/rosa31/stanford-ner-2018-10-16/classifiers/english.all.3class.distsim.crf.ser.gz',
 #					   '/home/rosa31/stanford-ner-2018-10-16/stanford-ner.jar',
 #					   encoding='utf-8')
 k = 5
-dir = '/home/anumeha/Documents/Multi-document-extraction-based-Summarization/Cluster_of_Docs/d30001t'
+dir = '/home/sunitha/Desktop/6th sem/IR/Multi-document-extraction-based-Summarization/Cluster_of_Docs/d30001t'
 
 def clean_sentence(sentence):
     return ''.join(e for e in sentence if e.isalnum() or e in [' ','-','\'',',','\''])
@@ -42,10 +42,7 @@ for doc in os.listdir(dir):
 	for line in lines:
 		sentences_dir.append(clean_sentence(line))
 	doc_array.append(['.'.join(sentences_dir)])
-
-print(doc_array)
 	
-
 def get_doc_order():
 	return doc_order
 
