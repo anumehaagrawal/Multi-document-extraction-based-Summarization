@@ -14,7 +14,6 @@ from nltk.tokenize import word_tokenize
 from nltk import word_tokenize, pos_tag
 from nltk.corpus import wordnet as wn
 
-word_vectors = api.load("glove-wiki-gigaword-100")
 st = StanfordNERTagger('/home/anumeha/Documents/Multi-document-extraction-based-Summarization/english.all.3class.distsim.crf.ser.gz',
 					   '/home/anumeha/Documents/Multi-document-extraction-based-Summarization/stanford-ner.jar',
 					   encoding='utf-8')
