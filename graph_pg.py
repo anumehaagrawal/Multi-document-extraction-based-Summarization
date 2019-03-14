@@ -1,7 +1,8 @@
-import sentance_imp1 as fv
+import sentence_imp as fv
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 import networkx as nx
+from sentence_array import sentence_array_final
 
 def document_generate():
     doc_array = sentence_array_final
@@ -43,7 +44,7 @@ def page_rank():
         nx_graph = nx.from_numpy_array(sim_mat)
         scores = nx.pagerank(nx_graph)
         ranked_sentences = sorted(((scores[i],s) for i,s in enumerate(sentences)), reverse=True)
-        sn = 10
+        sn = 3
 
         for i in range(sn):
                 print(ranked_sentences[i][1])

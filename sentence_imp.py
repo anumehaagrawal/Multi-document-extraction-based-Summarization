@@ -14,21 +14,25 @@ from nltk.tokenize import word_tokenize
 from nltk import word_tokenize, pos_tag
 from nltk.corpus import wordnet as wn
 
-st = StanfordNERTagger('/home/sunitha/Desktop/6th sem/IR/Multi-document-extraction-based-Summarization/english.all.3class.distsim.crf.ser.gz',
- 					   '/home/sunitha/Desktop/6th sem/IR/Multi-document-extraction-based-Summarization/stanford-ner.jar',
- 					   encoding='utf-8')
+#st = StanfordNERTagger('/home/sunitha/Desktop/6th sem/IR/Multi-document-extraction-based-Summarization/english.all.3class.distsim.crf.ser.gz',
+# 					   '/home/sunitha/Desktop/6th sem/IR/Multi-document-extraction-based-Summarization/stanford-ner.jar',
+# 					   encoding='utf-8')
 #st = StanfordNERTagger('/home/rosa31/stanford-ner-2018-10-16/classifiers/english.all.3class.distsim.crf.ser.gz',
 #					   '/home/rosa31/stanford-ner-2018-10-16/stanford-ner.jar',
 #					   encoding='utf-8')
-k = 5
-dir = '/home/sunitha/Desktop/6th sem/IR/Multi-document-extraction-based-Summarization/Cluster_of_Docs/d30001t'
+st = StanfordNERTagger('/home/anumeha/Documents/Multi-document-extraction-based-Summarization/english.all.3class.distsim.crf.ser.gz',
+  					   '/home/anumeha/Documents/Multi-document-extraction-based-Summarization/stanford-ner.jar',
+  					   encoding='utf-8')
+
+dir = '/home/anumeha/Documents/Multi-document-extraction-based-Summarization/Cluster_of_Docs/d30001t'
+#dir = '/home/sunitha/Desktop/6th sem/IR/Multi-document-extraction-based-Summarization/Cluster_of_Docs/d30001t'
+#dir = '/home/rosa31/Desktop/6thSem/IR/project/Multi-document-extraction-based-Summarization/Cluster_of_Docs/d30001t'
 
 def clean_sentence(sentence):
     return ''.join(e for e in sentence if e.isalnum() or e in [' ','-','\'',',','\''])
-
+k = 5
 doc_array = []
 doc_order = []
-#dir = '/home/rosa31/Desktop/6thSem/IR/project/Multi-document-extraction-based-Summarization/Cluster_of_Docs/d30001t'
 tf_of_words_in_all_docs = []
 
 for doc in os.listdir(dir):
