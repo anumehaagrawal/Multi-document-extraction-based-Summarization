@@ -3,7 +3,6 @@ from sklearn.metrics.pairwise import cosine_similarity
 from sentence_array import sentence_array_final
 maxLen = 101
 decoder_stacks = [[ ] for i in range(maxLen +1)]
-sentences_array=[]
 
 def create_sentence_val():
     doc_array = fv.get_documents()
@@ -13,6 +12,7 @@ def create_sentence_val():
             sentences = doc_array[doc][0].split(".")
             #doc_num = doc_order[doc]
             for group in sentences:
+                print(group,doc)
                 feature_vec = fv.tf_idf_sentence(group,doc)
                 mapping = [group,sum(feature_vec)]
                 sentences_array.append(mapping)
@@ -50,6 +50,6 @@ def stack_decoder():
                     score=importance(j)
                     print(newLen)
                     decoder_stacks[newLen].append([j,score])
-    print(decoder_stacks)
+                    print(decoder_stacks)
 
 create_sentence_val()

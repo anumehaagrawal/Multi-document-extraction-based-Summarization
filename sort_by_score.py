@@ -52,9 +52,13 @@ def score_imp_summary(threshold):
 def main():
     Summary = score_imp_summary(0.5) 
     print("The summary is:")
-    print('.'.join(Summary))
+    output = '.'.join(Summary)
+    print(output)
+    file=open('summary.txt',"w")
+    file.write(output)
     print("Word count:")
     print(len(''.join(Summary).split(' ')))
+
 
 if __name__=='__main__':
     main()   
