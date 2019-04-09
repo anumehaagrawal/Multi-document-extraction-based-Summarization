@@ -112,7 +112,7 @@ class Rouge:
 
 if __name__ == '__main__':
     file=open("rouge_scores.txt","a")
-    root_dir = '/home/sunitha/Desktop/6th_sem/IR/Multi-document-extraction-based-Summarization/summaries/page_rank/'
+    root_dir = '/home/sunitha/Desktop/6th_sem/IR/Multi-document-extraction-based-Summarization/summaries/gaussian_mixture/'
     dataset_dir= '/home/sunitha/Desktop/6th_sem/IR/Multi-document-extraction-based-Summarization/dataset/Test_Summaries/'
     for i in ["1","17","20","22","24","27","29","31","36","38","44"]:
         file1= root_dir+i+".py"
@@ -135,4 +135,4 @@ if __name__ == '__main__':
             text= " ".join(para)
             manual_summmary = text
         file.write(str(r.rouge_l([system_generated_summary], [manual_summmary])))
-file.write("\n")
+        file.write("\n")
