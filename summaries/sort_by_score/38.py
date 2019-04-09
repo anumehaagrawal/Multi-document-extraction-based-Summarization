@@ -1,0 +1,1 @@
+summary=["Saying if we have to clean, we will clean,'' Juan Antonio Samaranch responded on Sunday to allegations of corruption in the Olympic bidding process by declaring that IOC members who werefound to have accepted bribes from candidate cities could be expelled.If we have to clean, we will clean, he said"]

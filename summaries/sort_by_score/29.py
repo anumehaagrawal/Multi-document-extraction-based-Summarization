@@ -1,0 +1,1 @@
+summary=["The southerly is expected to ease to 15-20 knots over Sunday before swinging back to the north on Monday with a west to south westerly change expected to move through Tasmania and Bass Strait on Tuesday when the first yacht is anticipated to finish"]
