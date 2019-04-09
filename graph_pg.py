@@ -1,8 +1,8 @@
-import sentence_imp as fv
+
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 import networkx as nx
-from sentence_array import sentence_array_final
+from sentence_arrays.sentence_array44 import sentence_array_final
 
 def document_generate():
     doc_array = sentence_array_final
@@ -48,6 +48,7 @@ def page_rank():
 
         for i in range(sn):
                 print(ranked_sentences[i][1])
+                
 
 
 

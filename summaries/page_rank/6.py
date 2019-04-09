@@ -1,0 +1,3 @@
+summary = ["While the decision had been expected for 10 days, it nonetheless sent a strong signal that the owners and players will probably be willing to cancel at least part of the regular season in order to settle their labor dispute
+Owners hoped the players would think management was willing to wait them out, and come to terms with only a small part of the season canceled
+Not only are both sides still awaiting the outcome of an arbitration decision that is due before Oct 18 - the Fordham Law School dean John Feerick will rule whether or not more than 200 players with 800 million in guaranteed contracts should be paid during the lockout  but the owners and players also are making time to win public opinion before they test their fans' loyalties by canceling games"]
