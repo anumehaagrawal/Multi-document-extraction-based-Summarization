@@ -1,5 +1,4 @@
 from sentence_array import sentence_array_final
-import sentence_imp as fv
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
 import collections

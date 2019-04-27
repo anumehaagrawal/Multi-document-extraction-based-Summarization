@@ -1,4 +1,3 @@
-import sentence_imp as fv
 from sentence_array import sentence_array_final
 from sklearn.metrics.pairwise import cosine_similarity
 import re

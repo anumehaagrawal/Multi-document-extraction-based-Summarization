@@ -26,11 +26,11 @@ tf_of_words_in_all_docs = []
 #st = StanfordNERTagger('/home/rosa31/stanford-ner-2018-10-16/classifiers/english.all.3class.distsim.crf.ser.gz',
 #					   '/home/rosa31/stanford-ner-2018-10-16/stanford-ner.jar',
 #					   encoding='utf-8')
-st = StanfordNERTagger('/home/sunitha/Desktop/6th sem/IR/Multi-document-extraction-based-Summarization/english.all.3class.distsim.crf.ser.gz',
-                         '/home/sunitha/Desktop/6th sem/IR/Multi-document-extraction-based-Summarization/stanford-ner.jar',
+st = StanfordNERTagger('/home/anumeha/Documents/Multi-document-extraction-based-Summarization/english.all.3class.distsim.crf.ser.gz',
+                         '/home/anumeha/Documents/Multi-document-extraction-based-Summarization/stanford-ner.jar',
                          encoding='utf-8')
 
-root_dir = '/home/sunitha/Desktop/6th sem/IR/Multi-document-extraction-based-Summarization/dataset/Cluster_of_Docs'
+root_dir = '/home/anumeha/Documents/Multi-document-extraction-based-Summarization/dataset/Cluster_of_Docs'
 
 def clean_sentence(sentence):
     return ''.join(e for e in sentence if e.isalnum() or e in [' ','-','\'',',','\''])
@@ -243,7 +243,7 @@ for subdir, dirs, files in os.walk(root_dir):
             for line in lines:
                 sentences_dir.append(clean_sentence(line))
             doc_array.append(['.'.join(sentences_dir)])
-    print(doc_order)
+    
     sentences_array=[]
     for doc in range(10):
         if(doc<len(doc_array) and len(doc_array[doc])>= 1):
@@ -251,7 +251,6 @@ for subdir, dirs, files in os.walk(root_dir):
             for group in sentences:
                 feature_vec = tf_idf_sentence(group,doc)
                 mapping = [group,sum(feature_vec)]
-                print(mapping)
+
                 sentences_array.append(mapping)
-    print(sentences_array)
-    print("--------")
+    
